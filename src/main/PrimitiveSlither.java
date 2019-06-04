@@ -1,12 +1,21 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PrimitiveSlither implements KeyListener
+import graphics2D.Canvas;
+import graphics2D.Color;
+import graphics2D.Text;
+
+public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotionListener
 {
+	private int canvasWidth;
+	private int canvasHeight;
 	private int score = 0;
 	private int numOfEggs = 7;
 	private int time = 9000;
@@ -14,49 +23,50 @@ public class PrimitiveSlither implements KeyListener
 	private Random randomGenerator = new Random();
 	private ArrayList<Egg> eggs = new  ArrayList<Egg>();
 	
-	public PrimitiveSlither()
+	public PrimitiveSlither(int width, int height)
 	{
-		ball = new Egg(0, 0, 100, 100);
+		this.canvasWidth = width;
+		this.canvasHeight = height;
 	}
 	
 	public void run() throws InterruptedException, MalformedURLException
 	{
+		ball = new Egg(50, 50, 100, 100);
+		ball.setColor(Color.RED);
+		ball.fill();
+		Canvas.getInstance().add(ball);
+		
 		for (int i = 0; i < numOfEggs; i++)
 			newEgg();
 		
-		ball.setColor(Color.RED);
-		ball.fill();
+		Text timeleft = new Text(0 , 20 , "time left =" + time);
+		Canvas.getInstance().add(timeleft);
+		Text eggseaten = new Text(0, -5, "score =" + score);
+		Canvas.getInstance().add(eggseaten);
 		
 		for (int i = 0;time > i; time--) 
 		{
-			Text timeleft = new Text(0 , 20 , "time left =" + time);
-			timeleft.draw();
-			Rectangle cleartime = new Rectangle(0 , 20 ,100 ,15);
-			cleartime.setColor(Color.WHITE);
+			timeleft.setText("time left =" + time);
 			
 			if (time > 0)
 			{
 				Thread.sleep(10);
-				cleartime.fill();
 			}
 			
 			for	(int i1 = 0; i1 < eggs.size(); i1++)
 			{
-				
 				if (playerOnTarget(i1))
 				{
 					score += getScoreForColor(i1);
 					
-					Rectangle clearText = new Rectangle(0 , -7 ,100 ,15);
-					clearText.setColor(Color.WHITE);
-					clearText.fill();
-					Text eggseaten = new Text(0, -5, "score =" + score);
-					eggseaten.draw();
+					eggseaten.setText("score =" + score);
+					
 					eggs.get(i1).grow(-100, -100);
 					eggs.remove(i1);
 					newEgg();
 				}
 			}
+			
 			Canvas.getInstance().repaint();
 		}
 	}
@@ -113,6 +123,8 @@ public class PrimitiveSlither implements KeyListener
 		{
 			ball.setX(ball.getX() + 5);
 		}
+		
+		
 	}
 
 	@Override
@@ -155,9 +167,49 @@ public class PrimitiveSlither implements KeyListener
 			egg.setColor(Color.BLACK);
 		}
 		
-		egg.fill();
-		egg.draw();
+		Canvas.getInstance().add(egg);
 		eggs.add(egg);
 	}
-	
+
+	@Override
+	public void mouseDragged(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		// TODO Auto-generated method stub
+	}
 }
