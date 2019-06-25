@@ -20,6 +20,7 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 	private int numOfEggs = 7;
 	private int time = 9000;
 	private Egg ball;
+	private Egg player2;
 	private Random randomGenerator = new Random();
 	private ArrayList<Egg> eggs = new  ArrayList<Egg>();
 	
@@ -35,6 +36,12 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 		ball.setColor(Color.RED);
 		ball.fill();
 		Canvas.getInstance().add(ball);
+		
+		
+//		player2 = new Egg(300, 50, 100, 100);
+//		player2.setColor(Color.BLUE);
+//		player2.fill();
+//		Canvas.getInstance().add(player2);
 		
 		for (int i = 0; i < numOfEggs; i++)
 			newEgg();
@@ -58,10 +65,8 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 				if (playerOnTarget(i1))
 				{
 					score += getScoreForColor(i1);
-					
 					eggseaten.setText("score =" + score);
-					
-					eggs.get(i1).grow(-100, -100);
+					Explosion(i1);
 					eggs.remove(i1);
 					newEgg();
 				}
@@ -123,14 +128,13 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 		{
 			ball.setX(ball.getX() + 5);
 		}
-		
-		
+				
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) 
 	{
-		System.out.println("keyReleased="+KeyEvent.getKeyText(e.getKeyCode()));
+		
 	}
 
 	@Override
@@ -139,13 +143,38 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 		
 	}
 	
+	public void Explosion(int i1)
+	{
+		int x = 1;
+		for (int i = 1; i < 200; i++)
+		{
+			eggs.get(i1).grow( 1.01, 1.01);
+			Canvas.getInstance().repaint();
+			if(x == 1)
+			{
+				eggs.get(i1).setColor(Color.ORANGE);
+				eggs.get(i1).fill();
+				sleep(50);
+				x = 2;
+			}
+			else
+			{
+				eggs.get(i1).setColor(Color.DARK_GRAY);
+				eggs.get(i1).fill();
+				sleep(50);
+				x = 1;
+			}
+		}
+		
+		eggs.get(i1).grow(-130,-130);
+	}
+	
 	public void newEgg() 
 	{
 		int eggColor = randomGenerator.nextInt(5);
 		int spawnX = randomGenerator.nextInt(180);
 		int spawnY = randomGenerator.nextInt(100);
 		Egg egg = new Egg(spawnX * 10, spawnY * 10, 100, 100);
-		
 		if (eggColor == 1)
 		{
 			egg.setColor(Color.BLUE);
@@ -169,8 +198,15 @@ public class PrimitiveSlither implements KeyListener, MouseListener, MouseMotion
 		
 		Canvas.getInstance().add(egg);
 		eggs.add(egg);
+		//Canvas.getInstance().remove(ball);
+		//Canvas.getInstance().add(ball);
 	}
 
+	public void sleep(int milliseconds)
+    {
+        try{Thread.sleep(milliseconds);}catch(InterruptedException e){System.out.println(e);} 
+    }	
+	
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{

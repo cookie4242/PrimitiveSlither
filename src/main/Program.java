@@ -11,8 +11,8 @@ public class Program
     public static void main(String[] args) throws InterruptedException, MalformedURLException 
     {
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    	int width = (int)(screenSize.getWidth() * 0.8);
-    	int height = (int)(screenSize.getHeight() * 0.8);
+    	int width = (int)(screenSize.getWidth() * 1);
+    	int height = (int)(screenSize.getHeight() * 1);
     	PrimitiveSlither game = new PrimitiveSlither(width, height);
     	
     	Canvas.setKeyListener(game);
